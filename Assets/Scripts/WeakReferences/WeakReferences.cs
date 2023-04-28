@@ -1,4 +1,3 @@
-using UnityEngine;
 
 /*
  * 
@@ -15,12 +14,3 @@ using UnityEngine;
  * 
  */
 
-public class SomeBehaviour : MonoBehaviour
-{
-    public MonoBehaviour OtherBehaviour;
-
-    private void Start()
-    {
-        // Operations dependent on OtherBehaviour
-    }
-}
