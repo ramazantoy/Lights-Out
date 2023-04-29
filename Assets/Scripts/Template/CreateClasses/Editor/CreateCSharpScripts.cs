@@ -5,7 +5,7 @@ namespace CreateClasses
 {
     public class CreateCSharpScripts
     {
-        private const string path = "Assets/Other/CreateClasses/ClassTemplates/CSharpScripts/";
+        private const string path = "Assets/Scripts/Template/CreateClasses/ClassTemplates/CSharpScripts/";
 
         #region EMPTY CLASS
 

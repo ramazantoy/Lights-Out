@@ -5,7 +5,7 @@ namespace CreateClasses
 {
     public class CreateUnityScripts
     {
-        private const string path = "Assets/Other/CreateClasses/ClassTemplates/UnityScripts/";
+        private const string path = "Assets/Scripts/Template/CreateClasses/ClassTemplates/UnityScripts/";
 
         #region EMPTY SCRIPT
         private const string emptyScriptTemplate = "EmptyScript.cs.txt";
