@@ -1,8 +1,6 @@
-
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
-namespace LeonBrave
+namespace Template
 {
 	public class UserInput : MonoBehaviour
 	{
@@ -176,7 +174,7 @@ namespace LeonBrave
 			} 
 			
 			if (Input.GetMouseButtonDown(0)) {
-			 	_touchPos = Input.mousePosition;
+				_touchPos = Input.mousePosition;
 				return TouchType.Down;
 			}
 			if (Input.GetMouseButton(0))
@@ -232,82 +230,83 @@ namespace LeonBrave
 		}
 		[SerializeField]
 		private float swipeThreshold = 50f;
-		   private SwipeType GetSwipeDirection()
-    {
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
+		private SwipeType GetSwipeDirection()
+		{
+			if (Input.touchCount > 0)
+			{
+				Touch touch = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Began)
-            {
-                startPos = touch.position;
-            }
+				if (touch.phase == TouchPhase.Began)
+				{
+					startPos = touch.position;
+				}
 
-            if (touch.phase == TouchPhase.Ended)
-            {
-                endPos = touch.position;
-                direction = endPos - startPos;
+				if (touch.phase == TouchPhase.Ended)
+				{
+					endPos = touch.position;
+					direction = endPos - startPos;
 
-                if (Mathf.Abs(direction.x) > swipeThreshold && Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-                {
-                    if (direction.x > 0)
-                    {
-                        return SwipeType.Right;
-                    }
-                    else
-                    {
-                        return SwipeType.Left;
-                    }
-                }
-                else if (Mathf.Abs(direction.y) > swipeThreshold && Mathf.Abs(direction.y) > Mathf.Abs(direction.x))
-                {
-                    if (direction.y > 0)
-                    {
-                        return SwipeType.Up;
-                    }
-                    else
-                    {
-                        return SwipeType.Down;
-                    }
-                }
-            }
-        }
-        else if (Input.GetMouseButtonDown(0))
-        {
-            startPos = Input.mousePosition;
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            endPos = Input.mousePosition;
-            direction = endPos - startPos;
+					if (Mathf.Abs(direction.x) > swipeThreshold && Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+					{
+						if (direction.x > 0)
+						{
+							return SwipeType.Right;
+						}
+						else
+						{
+							return SwipeType.Left;
+						}
+					}
+					else if (Mathf.Abs(direction.y) > swipeThreshold && Mathf.Abs(direction.y) > Mathf.Abs(direction.x))
+					{
+						if (direction.y > 0)
+						{
+							return SwipeType.Up;
+						}
+						else
+						{
+							return SwipeType.Down;
+						}
+					}
+				}
+			}
+			else if (Input.GetMouseButtonDown(0))
+			{
+				startPos = Input.mousePosition;
+			}
+			else if (Input.GetMouseButtonUp(0))
+			{
+				endPos = Input.mousePosition;
+				direction = endPos - startPos;
 
-            if (Mathf.Abs(direction.x) > swipeThreshold && Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-            {
-                if (direction.x > 0)
-                {
-                    return SwipeType.Right;
-                }
-                else
-                {
-                    return SwipeType.Left;
-                }
-            }
-            else if (Mathf.Abs(direction.y) > swipeThreshold && Mathf.Abs(direction.y) > Mathf.Abs(direction.x))
-            {
-                if (direction.y > 0)
-                {
-                    return SwipeType.Up;
-                }
-                else
-                {
-                    return SwipeType.Down;
-                }
-            }
-        }
+				if (Mathf.Abs(direction.x) > swipeThreshold && Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+				{
+					if (direction.x > 0)
+					{
+						return SwipeType.Right;
+					}
+					else
+					{
+						return SwipeType.Left;
+					}
+				}
+				else if (Mathf.Abs(direction.y) > swipeThreshold && Mathf.Abs(direction.y) > Mathf.Abs(direction.x))
+				{
+					if (direction.y > 0)
+					{
+						return SwipeType.Up;
+					}
+					else
+					{
+						return SwipeType.Down;
+					}
+				}
+			}
 
-        return SwipeType.None;
-    }
+			return SwipeType.None;
+		}
 
 
 	}
 }
+
