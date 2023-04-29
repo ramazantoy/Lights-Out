@@ -51,7 +51,7 @@ namespace Jobs
         [Header("Array Length Settings")] 
         
         [SerializeField]
-        [Range(1,99999)]
+        [Range(1,500)]
         private int _minLength;
         [Range(1,500)]
         [SerializeField]
