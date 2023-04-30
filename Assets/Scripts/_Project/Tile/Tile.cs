@@ -15,20 +15,27 @@ namespace _Project.Tile
             {
                 _properties.MeshRenderer.material.color = _properties.LightOnColor;
             }
-            else
+            else if(_properties.TileState==TileState.LightOff)
             {
                 _properties.MeshRenderer.material.color = _properties.LightOffColor;
+            }
+            else
+            {
+                _properties.MeshRenderer.material.color=_properties.EmptyColor;
             }
         }
         
 
         public void SwitchTileState(bool callByNeighbour=false)
         {
-            if(_properties.TileState==TileState.Empty) return;
+            if (_properties.TileState == TileState.Empty)
+            {
+          
+                return;
+            }
 
             _properties.TileState = _properties.TileState == TileState.LightOn ? TileState.LightOff : TileState.LightOn;
-//            Debug.LogError(gameObject.name+" "+_properties.TileState);
-            
+
             SetTileColor();
             
             if (!callByNeighbour)

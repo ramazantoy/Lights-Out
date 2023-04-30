@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using _Project.Matrix;
 using _Project.Tile;
 using UnityEngine;
+using Random = System.Random;
 
 public class TileBuilder : MonoBehaviour
 {
@@ -42,7 +44,6 @@ public class TileBuilder : MonoBehaviour
                 {
                     value = 1; //LightOn
                 }
-
                 else
                 {
                     rate = UnityEngine.Random.Range(0, 101);
@@ -57,7 +58,27 @@ public class TileBuilder : MonoBehaviour
                 }
 
                 matrixInfos[i, j] = new MatrixInfo(i, j, value);
+            }
+        }
+        
+        bool[,] unreachable = FindUnreachableTiles(matrixInfos);
+        
+        for (int row = 0; row < _properties.Row; row++)
+        {
+            for (int col = 0; col < _properties.Column; col++)
+            {
+                if (!unreachable[row, col])
+                {
+                    matrixInfos[row, col].Value = -1;
+                }
+            }
+        }
+        
 
+        for (int i = 0; i < _properties.Row; i++)
+        {
+            for (int j = 0; j < _properties.Column; j++)
+            {
                 Vector3 spawnPos = startPos + new Vector3(j * (_properties.Spacing + 1),
                     -i * (_properties.Spacing + 1), 0); // Her bir tile'ın pozisyonu +1'in sebebi tilerın genişliği ve uzunluğu 1 birim
 
@@ -65,12 +86,17 @@ public class TileBuilder : MonoBehaviour
                 tileObject.gameObject.name = "[" + i + "," + j + "] Tile";
                 tileObject.transform.position = spawnPos;
                 tileObject.transform.parent = transform;
-                tileObject.GetComponent<Tile>().SetMatrixInfo(i, j, value);
+                tileObject.GetComponent<Tile>().SetMatrixInfo(i, j,matrixInfos[i,j].Value);
                 tileObject.gameObject.SetActive(true);
                 tiles.Add(tileObject);
             }
         }
         TileManager.Instance.MatrixInfo = matrixInfos;
+        List<(int row, int col)> answer=FindLightSwitchOrder(matrixInfos);
+        foreach (var valueTuple in answer)
+        {
+            Debug.Log(valueTuple.row+" "+valueTuple.col);
+        }
         return tiles;
     }
 
@@ -125,6 +151,7 @@ public class TileBuilder : MonoBehaviour
         }
 
         TileManager.Instance.MatrixInfo = matrixInfos;
+     
         return tiles;
     }
     private void SetCameraState(int row, int column)
@@ -145,4 +172,170 @@ public class TileBuilder : MonoBehaviour
         Camera.main.transform.position = cameraPos;
         
     }
+    
+    //Bfs Algoritması random oluşturulan matrix üzerinde  selectable olan her bir noktaya kuyruğa ekleniyor
+    
+    
+    /*private bool[,] FindUnreachableTiles(MatrixInfo[,] matrixInfo)
+    {
+        int rowCount = matrixInfo.GetLength(0);
+        int colCount = matrixInfo.GetLength(1);
+        MatrixHandler matrixHandler = new MatrixHandler(matrixInfo);
+        bool[,] visited = new bool[rowCount, colCount];
+
+        Queue<MatrixInfo> queue = new Queue<MatrixInfo>();
+
+        // Eleman eleman BFS işlemi
+        for (int row = 0; row < rowCount; row++)
+        {
+            for (int col = 0; col < colCount; col++)
+            {
+                // İlk eleman kuyruğa ekleniyor
+                if (queue.Count == 0 && (matrixInfo[row, col].Value == 1 || matrixInfo[row,col].Value==0) )
+                {
+                    visited[row, col] = true;
+                    queue.Enqueue(matrixInfo[row, col]);
+                }
+
+                // Kuyruktan eleman çıkarılıyor
+                while (queue.Count > 0)
+                {
+                    MatrixInfo current = queue.Dequeue();
+                    List<MatrixInfo> currentNeighbours = matrixHandler.GetMyNeighbour(current);
+
+                    // Komşular kuyruğa ekleniyor
+                    foreach (MatrixInfo neighbour in currentNeighbours)
+                    {
+                        int nRow = neighbour.Row;
+                        int nCol = neighbour.Column;
+
+                        if (!visited[nRow, nCol] && neighbour.Value != -1)
+                        {
+                            visited[nRow, nCol] = true;
+                            queue.Enqueue(neighbour);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Ziyaret edilmeyen elemanlar işaretleniyor
+        for (int row = 0; row < rowCount; row++)
+        {
+            for (int col = 0; col < colCount; col++)
+            {
+                if ((matrixInfo[row, col].Value == 1 || matrixInfo[row, col].Value == 0) && !visited[row, col])
+                {
+                    visited[row, col] = false;
+                }
+            }
+        }
+
+        return visited;
+    }*/
+
+    private bool[,] FindUnreachableTiles(MatrixInfo[,] matrixInfo)
+    {
+        int rowCount = matrixInfo.GetLength(0);
+        int colCount = matrixInfo.GetLength(1);
+        MatrixHandler matrixHandler = new MatrixHandler(matrixInfo);
+        bool[,] visited = new bool[rowCount, colCount];
+
+        Queue<MatrixInfo> queue = new Queue<MatrixInfo>();
+        
+        
+        MatrixInfo start = null;
+        while (start == null)
+        {
+            int randomRow = new Random().Next(rowCount);
+            int randomCol = new Random().Next(colCount);
+            MatrixInfo randomElement = matrixInfo[randomRow, randomCol];
+            if ((randomElement.Value == 1 || randomElement.Value == 0) && matrixHandler.GetMyNeighbour(randomElement).Count>0)
+            {
+                start = randomElement;
+            }
+        }
+
+        visited[start.Row, start.Column] = true;
+        queue.Enqueue(start);
+
+        // Eleman eleman BFS işlemi
+        while (queue.Count > 0)
+        {
+            MatrixInfo current = queue.Dequeue();
+            List<MatrixInfo> currentNeighbours = matrixHandler.GetMyNeighbour(current);
+
+            // Komşular kuyruğa ekleniyor
+            foreach (MatrixInfo neighbour in currentNeighbours)
+            {
+                int nRow = neighbour.Row;
+                int nCol = neighbour.Column;
+
+                if (!visited[nRow, nCol] && neighbour.Value != -1)
+                {
+                    visited[nRow, nCol] = true;
+                    queue.Enqueue(neighbour);
+                }
+            }
+        }
+
+        // Ziyaret edilmeyen elemanlar işaretleniyor
+        for (int row = 0; row < rowCount; row++)
+        {
+            for (int col = 0; col < colCount; col++)
+            {
+                if ((matrixInfo[row, col].Value == 1 || matrixInfo[row, col].Value == 0) && !visited[row, col])
+                {
+                    visited[row, col] = false;
+                }
+            }
+        }
+
+        return visited;
+    }
+
+
+    private List<(int row, int col)> FindLightSwitchOrder(MatrixInfo[,] matrixInfo)
+    {
+        // Initialize necessary variables
+        MatrixHandler matrixHandler = new MatrixHandler(matrixInfo);
+        int rowCount = matrixInfo.GetLength(0);
+        int colCount = matrixInfo.GetLength(1);
+        List<(int row, int col)> order = new List<(int row, int col)>();
+        MatrixInfo[,] tempMatrix = new MatrixInfo[rowCount, colCount];
+
+        // Copy the original matrix to the temporary matrix
+        for (int row = 0; row < rowCount; row++)
+        {
+            for (int col = 0; col < colCount; col++)
+            {
+                tempMatrix[row, col] = new MatrixInfo(matrixInfo[row, col].Row,matrixInfo[row,col].Column,matrixInfo[row,col].Value);
+            }
+        }
+
+        // Traverse all matrix elements and update their neighbors
+        for (int row = 0; row < rowCount; row++)
+        {
+            for (int col = 0; col < colCount; col++)
+            {
+                if (tempMatrix[row, col].Value == 0)
+                {
+                    // Add current switch to the order list
+                    order.Add((row, col));
+
+                    // Update the neighbors of the current switch
+                    List<MatrixInfo> neighbours = matrixHandler.GetMyNeighbour(tempMatrix[row, col]);
+                    foreach (MatrixInfo neighbour in neighbours)
+                    {
+                        neighbour.Value = 1 - neighbour.Value;
+                    }
+                }
+            }
+        }
+
+        return order;
+    }
+
+
+
 }

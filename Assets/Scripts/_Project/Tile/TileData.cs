@@ -10,6 +10,7 @@ namespace _Project.Tile
 		public MeshRenderer MeshRenderer;
 		public Color LightOnColor;
 		public Color LightOffColor;
+		public Color EmptyColor;
 		public float ColorOnOffTime;
 		public MatrixInfo MatrixInfo;
 	}

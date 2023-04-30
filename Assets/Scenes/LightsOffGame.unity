@@ -453,10 +453,10 @@ MonoBehaviour:
   _properties:
     Spacing: 0.05
     Padding: 0.25
-    Row: 6
-    Column: 8
+    Row: 5
+    Column: 5
     LightOnRate: 40
-    EmptyRate: 30
+    EmptyRate: 40
 --- !u!1001 &916567582
 PrefabInstance:
   m_ObjectHideFlags: 0

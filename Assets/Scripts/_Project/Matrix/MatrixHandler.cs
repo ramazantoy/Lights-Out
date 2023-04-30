@@ -6,6 +6,10 @@ namespace _Project.Matrix
 	[System.Serializable]
 	public  class MatrixHandler
 	{
+		public MatrixHandler(MatrixInfo[,] matrixInfos)
+		{
+			_matrixInfos = matrixInfos;
+		}
 		private MatrixInfo[,] _matrixInfos;
 
 		public  MatrixInfo[,] SetMatrix
@@ -16,7 +20,7 @@ namespace _Project.Matrix
 			}
 		}
 
-		public List<MatrixInfo> GetMyNeighbour(MatrixInfo matrixInfo)
+		public List<MatrixInfo> GetMyNeighbourWithCross(MatrixInfo matrixInfo)
 		{
 			List<MatrixInfo> myNeighbours = new List<MatrixInfo>();
 	
@@ -64,9 +68,38 @@ namespace _Project.Matrix
 			}
 
 			return myNeighbours;
-
-			return myNeighbours;
+			
 		}
+	public List<MatrixInfo> GetMyNeighbour(MatrixInfo matrixInfo)
+	{
+		List<MatrixInfo> myNeighbours = new List<MatrixInfo>();
+
+		int rowSize = _matrixInfos.GetLength(0);
+		int colSize = _matrixInfos.GetLength(1);
+
+		if (matrixInfo.Row > 0) // üst komşu
+		{
+			myNeighbours.Add(_matrixInfos[matrixInfo.Row-1, matrixInfo.Column]);
+		}
+
+		if (matrixInfo.Row < rowSize-1) // alt komşu
+		{
+			myNeighbours.Add(_matrixInfos[matrixInfo.Row+1, matrixInfo.Column]);
+		}
+
+		if (matrixInfo.Column > 0) // sol komşu
+		{
+			myNeighbours.Add(_matrixInfos[matrixInfo.Row, matrixInfo.Column-1]);
+		}
+
+		if (matrixInfo.Column < colSize-1) // sağ komşu
+		{
+			myNeighbours.Add(_matrixInfos[matrixInfo.Row, matrixInfo.Column+1]);
+		}
+
+		return myNeighbours;
+	}
+
 		
 		public int GetIndex( int row, int column)
 		{
