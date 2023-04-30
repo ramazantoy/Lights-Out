@@ -22,13 +22,20 @@ namespace _Project.Tile
         }
         
 
-        public void SwitchTileState()
+        public void SwitchTileState(bool callByNeighbour=false)
         {
             if(_properties.TileState==TileState.Empty) return;
 
             _properties.TileState = _properties.TileState == TileState.LightOn ? TileState.LightOff : TileState.LightOn;
+//            Debug.LogError(gameObject.name+" "+_properties.TileState);
             
             SetTileColor();
+            
+            if (!callByNeighbour)
+            {
+                TileManager.Instance.TileDown(_properties.MatrixInfo);
+            }
+   
         }
 
         private void SetTileColor()
