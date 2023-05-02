@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86ea196c53944ba9af91a160c6f87c9, type: 3}
   m_Name: Level_4
   m_EditorClassIdentifier: 
-  SavedMatrix: 010000000100000001000000
-  RowCount: 1
+  SavedMatrix: 010000000100000001000000000000000100000000000000000000000000000000000000
+  RowCount: 3
   ColCount: 3
