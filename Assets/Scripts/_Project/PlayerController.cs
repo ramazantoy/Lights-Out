@@ -5,22 +5,9 @@ namespace _Project
 {
     public class PlayerController : MonoBehaviour
     {
-        public static PlayerController Instance;
 
         [SerializeField] private LayerMask _tileLayerMask;
-
-        void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-        }
-
+        
         private void Start()
         {
             UserInput.Instance.TouchEvent += Touch;

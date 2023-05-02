@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -18,4 +20,6 @@ namespace _Project.Tile
         [Range(0, 100)] 
         public int EmptyRate;
     }
+
+
 }

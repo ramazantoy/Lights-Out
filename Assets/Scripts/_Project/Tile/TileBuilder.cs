@@ -22,7 +22,7 @@ public class TileBuilder : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    
     public List<Tile> BuildRandomTiles()
     {
         SetCameraState(_properties.Row, _properties.Column);
