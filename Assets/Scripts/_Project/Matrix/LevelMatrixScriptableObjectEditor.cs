@@ -38,11 +38,10 @@ namespace _Project.Matrix
                     levelMatrix.Matrix = new int[levelMatrix.RowCount, levelMatrix.ColCount];
                     levelMatrix.SaveMatrix();
                     EditorUtility.SetDirty(levelMatrix);
-                
                 }
             }
-          
-
+     
+            
             for (int i = 0; i < levelMatrix.RowCount; i++)
             {
                 for (int j = 0; j < levelMatrix.ColCount; j++)
