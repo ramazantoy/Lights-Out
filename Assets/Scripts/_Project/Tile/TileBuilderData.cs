@@ -8,9 +8,9 @@ namespace _Project.Tile
     {
         public float Spacing = 0.05f;
         public float Padding = 0.5f;
+        [Header("** İf Using Random Level**")]
         public int Row; // Matris boyutu - satır sayısı
         public int Column; // Matris boyutu - sütun sayısı
-        [Header("** İf Using Random Level**")]
         [Header("**Tile Spawn Settings**")]
         [Range(0, 100)] 
         public int LightOnRate;

@@ -16,8 +16,27 @@ namespace _Project.Tile
 		{
 			set
 			{
-				_properties.MatrixHandler.SetMatrix = value;
+				_properties.MatrixHandler.Matrix= value;
+				
+				SaveManager.Instance.GameSaveState.Row = _properties.MatrixHandler.Matrix.GetLength(0);
+				SaveManager.Instance.GameSaveState.Col = _properties.MatrixHandler.Matrix.GetLength(1);
+				SaveManager.Instance.GameSaveState.HaveSaveGame = true;
+				SaveManager.Instance.GameSaveState.MatrixValues = TwoDArrayToList(value);
 			}
+		}
+
+		private void SaveCurrentMatrix()
+		{
+			List<int> tileValues = new List<int>();
+			foreach (Tile tile in _tiles)
+			{
+				tileValues.Add(tile.TileValue);
+			}
+			
+			SaveManager.Instance.GameSaveState.MatrixValues = tileValues;
+			
+
+
 		}
 	
 		void Awake()
@@ -39,19 +58,83 @@ namespace _Project.Tile
 
 		private void BuildTiles()
 		{
-			_tiles=_properties.TileBuilder.BuildRandomTiles();
+			if (SaveManager.Instance.GameSaveState.HaveSaveGame)
+			{
+
+				int row = SaveManager.Instance.GameSaveState.Row;
+				int col = SaveManager.Instance.GameSaveState.Col;
+				List<int> matrixValues = SaveManager.Instance.GameSaveState.MatrixValues;
+				
+				MatrixInfo [,]  matrixInfos= ListTo2DMatrixInfoArray(row, col, matrixValues);
+
+				_tiles=_properties.TileBuilder.BuildSavedTiles(matrixInfos);
+			}
+			else
+			{
+				_tiles=_properties.TileBuilder.BuildRandomTiles();
+			}
+
 		}
 
 		public void TileDown(MatrixInfo matrixInfo)
 		{
 			List<MatrixInfo> matrixNeighbours = _properties.MatrixHandler.GetMyNeighbour(matrixInfo);
-		
+			
 			foreach (MatrixInfo matrixNeighbour in matrixNeighbours)
-			{ ;
+			{ 
 				_tiles[_properties.MatrixHandler.GetIndex(matrixNeighbour.Row,matrixNeighbour.Column)].SwitchTileState(true);
 			}
+			
+			SaveCurrentMatrix();
 		}
-	
+		
+		private MatrixInfo[,] ListTo2DMatrixInfoArray(int row, int col, List<int> list)
+		{
+			MatrixInfo[,] result = new MatrixInfo[row, col];
+			for (int i = 0; i < row; i++)
+			{
+				for (int j = 0; j < col; j++)
+				{
+					int index = i * col + j;
+					result[i, j] = new MatrixInfo(i, j, list[index]);
+				}
+			}
+			return result;
+		}
+		
+		private List<int> TwoDArrayToList(MatrixInfo[,] arr)
+		{
+			int rows = arr.GetLength(0);
+			int cols = arr.GetLength(1);
+			List<int> result = new List<int>(rows * cols);
+
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < cols; j++)
+				{
+					result.Add(arr[i, j].Value);
+				}
+			}
+			return result;
+		}
+		public  int[,] ListTo2DArray(int row, int col, List<int> list)
+		{
+
+			int[,] result = new int[row, col];
+			for (int i = 0; i < row; i++)
+			{
+				for (int j = 0; j < col; j++)
+				{
+					int index = i * col + j;
+					result[i, j] = list[index];
+				}
+			}
+			return result;
+		}
+
+		
+		
+
 
 	}
 }

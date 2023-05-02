@@ -12,11 +12,15 @@ namespace _Project.Matrix
 		}
 		private MatrixInfo[,] _matrixInfos;
 
-		public  MatrixInfo[,] SetMatrix
+		public  MatrixInfo[,] Matrix
 		{
 			set
 			{
 				_matrixInfos = value;
+			}
+			get
+			{
+				return _matrixInfos;
 			}
 		}
 

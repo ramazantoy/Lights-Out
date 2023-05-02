@@ -55,5 +55,13 @@ namespace _Project.Tile
             _properties.TileState = (TileState)value;
             _properties.MatrixInfo = new MatrixInfo(row, column, value);
         }
+
+        public int TileValue
+        {
+            get
+            {
+                return (int)_properties.TileState;
+            }
+        }
     }
 }
