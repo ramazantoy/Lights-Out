@@ -457,8 +457,8 @@ MonoBehaviour:
     Padding: 0.25
     Row: 5
     Column: 5
-    LightOnRate: 30
-    EmptyRate: 40
+    LightOnRate: 60
+    EmptyRate: 30
 --- !u!1001 &916567582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -877,7 +877,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _properties:
     TileBuilder: {fileID: 698428097}
-    LevelMatrixScriptableObject: {fileID: 11400000, guid: ed47b82d74f284af79cdf3f387789ad0, type: 2}
 --- !u!114 &1459788024 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8513216475413275778, guid: 3b775dc2491c0dd41aa255780d13a900, type: 3}

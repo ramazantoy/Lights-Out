@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Project.Matrix;
 using UnityEngine;
 
 namespace _Project.Tile
@@ -22,6 +23,14 @@ namespace _Project.Tile
 				SaveManager.Instance.GameSaveState.Col = _properties.MatrixHandler.Matrix.GetLength(1);
 				SaveManager.Instance.GameSaveState.HaveSaveGame = true;
 				SaveManager.Instance.GameSaveState.MatrixValues = TwoDArrayToList(value);
+			}
+		}
+
+		public MatrixHandler MatrixHandler
+		{
+			get
+			{
+				return _properties.MatrixHandler;
 			}
 		}
 

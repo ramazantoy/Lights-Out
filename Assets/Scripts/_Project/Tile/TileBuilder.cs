@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _Project.Matrix;
 using UnityEngine;
@@ -22,17 +23,39 @@ namespace _Project.Tile
                 Destroy(gameObject);
             }
         }
+        
+        private void SetCameraState(int row, int column)
+        {
+            float tileWidth = 1f; //Tile genişliği
+            float tileHeight = 1f; //Tile Yüksekliği
+
+            float totalWidth = _properties.Column * (tileWidth + _properties.Spacing) - _properties.Spacing +
+                               2 * _properties
+                                   .Padding; //kenar boşluğu ve tilelar arasındaki boşlukları hesaba katarak toplam genişliğin hesaplanması
+            float totalHeight = _properties.Row * (tileHeight + _properties.Spacing) - _properties.Spacing +
+                                2 * _properties
+                                    .Padding; //kenar boşluğu ve tilelar arasındaki boşlukları hesaba katarak toplam yüksekliğim hesaplanması
+
+            //Elde edilen genişlik ve yüksekliğe göre kameranın ayarlanması
+            float cameraSize = Mathf.Max(totalHeight / 2f, totalWidth / 2f / Camera.main.aspect);
+            Camera.main.orthographicSize = cameraSize;
+
+
+            Vector3 cameraPos = new Vector3(totalWidth / 2f - tileWidth / 2f - _properties.Padding,
+                -totalHeight / 2f + tileHeight / 2f + _properties.Padding, -cameraSize);
+            Camera.main.transform.position = cameraPos;
+        }
     
         public List<Tile> BuildRandomTiles()
         {
             SetCameraState(_properties.Row, _properties.Column);
 
             MatrixInfo[,] matrixInfos = new MatrixInfo[_properties.Row, _properties.Column];
-
+            
             Vector3 startPos = new Vector3(0, 0, 0);
 
             List<Tile> tiles = new List<Tile>();
-
+            
 
             for (int i = 0; i < _properties.Row; i++)
             {
@@ -57,6 +80,7 @@ namespace _Project.Tile
                             value = 0; //LightOff
                         }
                     }
+                    
 
                     matrixInfos[i, j] = new MatrixInfo(i, j, value);
                 }
@@ -94,6 +118,7 @@ namespace _Project.Tile
             }
 
             TileManager.Instance.MatrixInfo = matrixInfos;
+
             return tiles;
         }
 
@@ -130,31 +155,7 @@ namespace _Project.Tile
 
             return tiles;
         }
-
-        private void SetCameraState(int row, int column)
-        {
-            float tileWidth = 1f; //Tile genişliği
-            float tileHeight = 1f; //Tile Yüksekliği
-
-            float totalWidth = _properties.Column * (tileWidth + _properties.Spacing) - _properties.Spacing +
-                               2 * _properties
-                                   .Padding; //kenar boşluğu ve tilelar arasındaki boşlukları hesaba katarak toplam genişliğin hesaplanması
-            float totalHeight = _properties.Row * (tileHeight + _properties.Spacing) - _properties.Spacing +
-                                2 * _properties
-                                    .Padding; //kenar boşluğu ve tilelar arasındaki boşlukları hesaba katarak toplam yüksekliğim hesaplanması
-
-            //Elde edilen genişlik ve yüksekliğe göre kameranın ayarlanması
-            float cameraSize = Mathf.Max(totalHeight / 2f, totalWidth / 2f / Camera.main.aspect);
-            Camera.main.orthographicSize = cameraSize;
-
-
-            Vector3 cameraPos = new Vector3(totalWidth / 2f - tileWidth / 2f - _properties.Padding,
-                -totalHeight / 2f + tileHeight / 2f + _properties.Padding, -cameraSize);
-            Camera.main.transform.position = cameraPos;
-        }
-
-        //Bfs Algoritması random oluşturulan matrix üzerinde  selectable olan her bir noktaya kuyruğa ekleniyor
-        private bool[,] FindUnreachableTiles(MatrixInfo[,] matrixInfo)
+             private bool[,] FindUnreachableTiles(MatrixInfo[,] matrixInfo)
         {
             int rowCount = matrixInfo.GetLength(0);
             int colCount = matrixInfo.GetLength(1);
@@ -170,8 +171,7 @@ namespace _Project.Tile
                 int randomRow = new Random().Next(rowCount);
                 int randomCol = new Random().Next(colCount);
                 MatrixInfo randomElement = matrixInfo[randomRow, randomCol];
-                if ((randomElement.Value == 1 || randomElement.Value == 0) &&
-                    matrixHandler.GetMyNeighbour(randomElement).Count > 0)
+                if ((randomElement.Value == 1) && matrixHandler.GetMyNeighbour(randomElement).Count > 0)
                 {
                     start = randomElement;
                 }
@@ -180,33 +180,28 @@ namespace _Project.Tile
             visited[start.Row, start.Column] = true;
             queue.Enqueue(start);
 
-            // Eleman eleman BFS işlemi
             while (queue.Count > 0)
             {
                 MatrixInfo current = queue.Dequeue();
                 List<MatrixInfo> currentNeighbours = matrixHandler.GetMyNeighbour(current);
-
-                // Komşular kuyruğa ekleniyor
+                
                 foreach (MatrixInfo neighbour in currentNeighbours)
                 {
                     int nRow = neighbour.Row;
                     int nCol = neighbour.Column;
 
-                    if (!visited[nRow, nCol] && neighbour.Value != -1)
+                    if (!visited[nRow, nCol] && neighbour.Value==1)
                     {
                         visited[nRow, nCol] = true;
                         queue.Enqueue(neighbour);
                     }
                 }
             }
-            //Geçilebilecek siyah nokta döşe
-
-            // Ziyaret edilmeyen elemanlar işaretleniyor
             for (int row = 0; row < rowCount; row++)
             {
                 for (int col = 0; col < colCount; col++)
                 {
-                    if ((matrixInfo[row, col].Value == 1 || matrixInfo[row, col].Value == 0) && !visited[row, col])
+                    if ((matrixInfo[row, col].Value == 1 && !visited[row, col]))
                     {
                         visited[row, col] = false;
                     }
@@ -215,9 +210,61 @@ namespace _Project.Tile
         
             return visited;
         }
+        private  bool IsSolvable(MatrixInfo[,] matrixInfo)
+        {
+            int rowCount = matrixInfo.GetLength(0);
+            int colCount = matrixInfo.GetLength(1);
+            MatrixHandler matrixHandler = new MatrixHandler(matrixInfo);
+            bool[,] visited = new bool[rowCount, colCount];
+
+            Queue<MatrixInfo> queue = new Queue<MatrixInfo>();
 
 
- 
+            MatrixInfo start = null;
+            while (start == null)
+            {
+                int randomRow = new Random().Next(rowCount);
+                int randomCol = new Random().Next(colCount);
+                MatrixInfo randomElement = matrixInfo[randomRow, randomCol];
+                if ((randomElement.Value == 1) && matrixHandler.GetMyNeighbour(randomElement).Count > 0)
+                {
+                    start = randomElement;
+                }
+            }
 
+            visited[start.Row, start.Column] = true;
+            queue.Enqueue(start);
+            
+            while (queue.Count > 0)
+            {
+                MatrixInfo current = queue.Dequeue();
+                List<MatrixInfo> currentNeighbours = matrixHandler.GetMyNeighbour(current);
+                
+                foreach (MatrixInfo neighbour in currentNeighbours)
+                {
+                    current.Value = 0;
+                    int nRow = neighbour.Row;
+                    int nCol = neighbour.Column;
+
+                    if (!visited[nRow, nCol])
+                    {
+                        visited[nRow, nCol] = true;
+                        neighbour.Value ^=1;
+                        queue.Enqueue(neighbour);
+                    }
+                }
+            }
+            for (int row = 0; row < rowCount; row++)
+            {
+                for (int col = 0; col < colCount; col++)
+                {
+                    if ((matrixInfo[row, col].Value == 1) && !visited[row, col])
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 }
