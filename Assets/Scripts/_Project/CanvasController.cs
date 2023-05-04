@@ -30,7 +30,7 @@ namespace _Project
 			_myAnimator = transform.GetComponent<Animator>();
 		}
 
-		public void DummyButtonDown(int buttonId)
+		public void DummyButtonDown(int buttonId) // Basılan Butona ait sahnenin yüklenmesi
 		{
 			SetTrigger("MainMenuOut");
 			StartCoroutine(LoadLevel(buttonId));
@@ -41,7 +41,7 @@ namespace _Project
 			_myAnimator.SetTrigger(trigger);
 		}
 
-		private IEnumerator LoadLevel(int buttonId)
+		private IEnumerator LoadLevel(int buttonId) // Biraz bekledikten sonra game play veya dummy sahnelerinin yüklenmesi
 		{
 			yield return new WaitForSeconds(.35f);
 			if (buttonId <= 2)
@@ -59,9 +59,8 @@ namespace _Project
 			}
 		}
 
-		public void BackButtonIn()
+		public void BackButtonIn() // dummy sahnelerden çıkış yapılması
 		{
-			
 			SceneManager.Instance.UnloadScene("DummyScene_"+_currentButtonId);
 			SetTrigger("BackButtonOut");
 			_cameraMain.SetActive(true);

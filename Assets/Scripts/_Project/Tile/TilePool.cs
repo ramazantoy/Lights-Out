@@ -1,57 +1,58 @@
-using System.Collections;
 using System.Collections.Generic;
-using _Project.Tile;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 
-public class TilePool : MonoBehaviour
+//Tileları tutan klasik bir havuz
+namespace _Project.Tile
 {
-    public static TilePool Instance;
-
-    private void Awake()
+    public class TilePool : MonoBehaviour
     {
-        if (Instance == null)
+        public static TilePool Instance;
+
+        private void Awake()
         {
-            Instance = this;
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
         }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
-    }
-    [SerializeField] private Tile _tilePrefab;
+        [SerializeField] private Tile _tilePrefab;
     
-    [SerializeField] private List<Tile> _tileList;
+        [SerializeField] private List<Tile> _tileList;
     
-    public void AddObject(Tile tile)
-    {
-        if (!_tileList.Contains(tile))
+        public void AddObject(Tile tile)
         {
-            _tileList.Add(tile);
+            if (!_tileList.Contains(tile))
+            {
+                _tileList.Add(tile);
 
-            tile.transform.parent = transform;
-            tile.transform.localPosition = Vector3.zero;
+                tile.transform.parent = transform;
+                tile.transform.localPosition = Vector3.zero;
 
-            tile.gameObject.SetActive(false);
-        }
-    }
-
-    public Tile TakeTile()
-    {
-        Tile tileTemp;
-        if (_tileList.Count > 0)
-        {
-            tileTemp = _tileList[0];
-            _tileList.Remove(tileTemp);
-        }
-        else
-        {
-            tileTemp = Instantiate(_tilePrefab);
+                tile.gameObject.SetActive(false);
+            }
         }
 
-        //poolableGO.SetActive(true);
-        tileTemp.transform.parent = null;
-        return tileTemp;
+        public Tile TakeTile()
+        {
+            Tile tileTemp;
+            if (_tileList.Count > 0)
+            {
+                tileTemp = _tileList[0];
+                _tileList.Remove(tileTemp);
+            }
+            else
+            {
+                tileTemp = Instantiate(_tilePrefab);
+            }
+
+            //poolableGO.SetActive(true);
+            tileTemp.transform.parent = null;
+            return tileTemp;
+        }
     }
 }

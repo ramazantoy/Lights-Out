@@ -31,22 +31,20 @@ namespace _Project.GameManager
 				Destroy(gameObject);
 			}
 
-			_gameState = GameState.Null;
+			_gameState = GameState.Null; // oyun ana menude açıldığı için boş state'de başlatılması
 		}
 
-		public void UpdateGameState(GameState gameState)
+		public void UpdateGameState(GameState gameState) // oyunun state'inin değiştirilmesi
 		{
 			if(_gameState==gameState) return;
 
 			_gameState = gameState;
-			if (_gameState == GameState.End)
+			if (_gameState == GameState.End) // Oyun bittiyse lights out'un yeni bir maze ile başlatılması
 			{
 				SaveManager.Instance.GameSaveState.LastLevel++;
 				SaveManager.Instance.GameSaveState.HaveSaveGame = false;
 				_gameState = GameState.Playing;
 				SceneManager.Instance.RestartGame();
-				
-				//Load to nextLevel
 			}
 		
 		}
@@ -54,7 +52,7 @@ namespace _Project.GameManager
 		private void Update()
 		{
 			if(_gameState!=GameState.Playing) return;
-			if (Input.GetKeyDown(KeyCode.Space))
+			if (Input.GetKeyDown(KeyCode.Space)) //Bazen Bfs algoritması geçilemeyen leveller oluşturuyor. Space'e basılırsa oynanılan level'in geçildi sayılması
 			{
 				UpdateGameState(GameState.End);
 			}

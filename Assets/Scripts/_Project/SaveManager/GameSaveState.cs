@@ -4,18 +4,18 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 
 [System.Serializable]
-public class GameSaveState
+public class GameSaveState //Save manager tarafından kullanılan kayıt etme sınıfı
 {
-    [UnityEngine.SerializeField] private int _lastLevel;
+    [UnityEngine.SerializeField] private int _lastLevel; // Oynanılan son level
 
-    [UnityEngine.SerializeField] private int _rowCount, _colCount;
+    [UnityEngine.SerializeField] private int _rowCount, _colCount; //En son oynanılan satır ve sütün sayısı tile'ların durumunu liste olarak kayıt ettiğim için gerekliler
 
-    [SerializeField] private bool _haveSaveGame;
+    [SerializeField] private bool _haveSaveGame; // oyun daha önce oynandıysa kayıtlı tahtanın yüklenmesi için
 
 
-    [SerializeField] private List<int> _matrixValues;
+    [SerializeField] private List<int> _matrixValues; // kayıtlı oyun tahtasındaki anlık matris elemanlarının değeri
 
-    public void SetStartValues()
+    public void SetStartValues() // Varsılan kayıtlı değişkenker
     {
         string saveString = PlayerPrefs.GetString("gameSave");
 //        Debug.Log(saveString);
@@ -43,27 +43,29 @@ public class GameSaveState
         }
     }
 
-    private void Save()
+    private void Save() // bu sınıfın json formatına dönüştürülüp kayıt edilmesi
     {
         //Debug.Log(SaveToString());
         PlayerPrefs.SetString("gameSave", SaveToString());
     }
 
-    public void LoadFromString(string jsonString)
+    public void LoadFromString(string jsonString) // kaydın json yardımıyla bu sınıfa yüklenmesi
     {
         JsonUtility.FromJsonOverwrite(jsonString, this);
     }
 
-    public void Load()
+    public void Load() //yükleme işlemi
     {
         string jsonString = PlayerPrefs.GetString("gameSave", "");
         LoadFromString(jsonString);
     }
 
-    private string SaveToString()
+    private string SaveToString() //sınıf bilgilerinin json olarak döndürülmesi
     {
         return JsonUtility.ToJson(this);
     }
+    
+    //Değişkenlere ait get set fonksiyonları
 
     public bool HaveSaveGame
     {

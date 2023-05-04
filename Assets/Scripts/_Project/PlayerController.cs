@@ -11,10 +11,10 @@ namespace _Project
         
         private void Start()
         {
-            UserInput.Instance.TouchEvent += Touch;
+            UserInput.Instance.TouchEvent += Touch; // UserInput'dan gelen dokunma event'i
         }
 
-        private void Touch(Template.UserInput.TouchType touchType)
+        private void Touch(Template.UserInput.TouchType touchType) //Dokunmanın tipine ve oyunun duruma göre tile'ın state'inin değiştirilmesi
         {
             if (touchType != UserInput.TouchType.Down || GameManager.GameManager.Instance.GameState!=GameState.Playing) return;
         

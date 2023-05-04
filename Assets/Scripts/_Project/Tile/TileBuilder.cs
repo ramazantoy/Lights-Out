@@ -24,7 +24,7 @@ namespace _Project.Tile
             }
         }
         
-        private void SetCameraState(int row, int column)
+        private void SetCameraState() //row col durumuna göre kameranın ayarlarının değiştirilmesi
         {
             float tileWidth = 1f; //Tile genişliği
             float tileHeight = 1f; //Tile Yüksekliği
@@ -46,18 +46,18 @@ namespace _Project.Tile
             Camera.main.transform.position = cameraPos;
         }
     
-        public List<Tile> BuildRandomTiles()
+        public List<Tile> BuildRandomTiles() //Bfs algoritmasyıla rasrgele level oluşturulması
         {
-            SetCameraState(_properties.Row, _properties.Column);
+            SetCameraState(); //kamera konumu
 
             MatrixInfo[,] matrixInfos = new MatrixInfo[_properties.Row, _properties.Column];
             
-            Vector3 startPos = new Vector3(0, 0, 0);
+            Vector3 startPos = new Vector3(0, 0, 0); //Tilelar yerleştirirken başlangıç pozisyonu
 
             List<Tile> tiles = new List<Tile>();
             
 
-            for (int i = 0; i < _properties.Row; i++)
+            for (int i = 0; i < _properties.Row; i++) //Rastgele tile değerinin oluşturulması
             {
                 for (int j = 0; j < _properties.Column; j++)
                 {
@@ -87,9 +87,9 @@ namespace _Project.Tile
             }
         
 
-            bool[,] unreachable = FindUnreachableTiles(matrixInfos);
+            bool[,] unreachable = FindUnreachableTiles(matrixInfos); //Rastgele oluşan tile'ların bfs ile gezilip ziyaret edilmeyenleri false olarak gelmesi
 
-            for (int row = 0; row < _properties.Row; row++)
+            for (int row = 0; row < _properties.Row; row++)// değeri 1 olupta ziyaret edilmeyenlerin -1 ayarlanması
             {
                 for (int col = 0; col < _properties.Column; col++)
                 {
@@ -100,7 +100,7 @@ namespace _Project.Tile
                 }
             }
 
-            for (int i = 0; i < _properties.Row; i++)
+            for (int i = 0; i < _properties.Row; i++)//en son durumda oluşan matrise göre tile'ların belli bir mesafede spawn edilip gerekli değişkenlerin ayarlanması
             {
                 for (int j = 0; j < _properties.Column; j++)
                 {
@@ -116,13 +116,13 @@ namespace _Project.Tile
                 }
             }
 
-            TileManager.Instance.MatrixInfo = matrixInfos;
+            TileManager.Instance.MatrixInfo = matrixInfos;//oluşan maze'in matrixhandler üzerinde set edilmesi
 
-            return tiles;
+            return tiles;//oluşan tile'ların listesi
         }
 
 
-        public List<Tile> BuildSavedTiles(MatrixInfo[,] matrixInfos)
+        public List<Tile> BuildSavedTiles(MatrixInfo[,] matrixInfos) //Kayıtlı bir maze var ise onun yüklenmesi
         {
             Vector3 startPos = new Vector3(0, 0, 0);
 
@@ -131,7 +131,7 @@ namespace _Project.Tile
             int row = matrixInfos.GetLength(0);
             int column = matrixInfos.GetLength(1);
 
-            SetCameraState(row, column);
+            SetCameraState();
 
             for (int i = 0; i < row; i++)
             {
@@ -154,7 +154,7 @@ namespace _Project.Tile
 
             return tiles;
         }
-             private bool[,] FindUnreachableTiles(MatrixInfo[,] matrixInfo)
+             private bool[,] FindUnreachableTiles(MatrixInfo[,] matrixInfo)//Bfs algoritması ile maze üzerinde erişilemiyen nokta tespiti
         {
             int rowCount = matrixInfo.GetLength(0);
             int colCount = matrixInfo.GetLength(1);
@@ -165,7 +165,7 @@ namespace _Project.Tile
 
 
             MatrixInfo start = null;
-            while (start == null)
+            while (start == null)//rastgele değeri 1 olan başlangıç noktasının seçilmesi
             {
                 int randomRow = new Random().Next(rowCount);
                 int randomCol = new Random().Next(colCount);
@@ -177,18 +177,20 @@ namespace _Project.Tile
             }
 
             visited[start.Row, start.Column] = true;
-            queue.Enqueue(start);
+            queue.Enqueue(start);//başkangıç noktasının kuyruğa eklenmesi
 
-            while (queue.Count > 0)
+            while (queue.Count > 0) // kuyruk boş olmadığı kuyruktan eleman çıkarılması
             {
                 MatrixInfo current = queue.Dequeue();
                 List<MatrixInfo> currentNeighbours = matrixHandler.GetMyNeighbour(current);
                 
+                //çıkarılan elemanın komşularının state'inin 1 yapılması level geçilebilir olsun dite
                 foreach (MatrixInfo neighbour in currentNeighbours)
                 {
                     int nRow = neighbour.Row;
                     int nCol = neighbour.Column;
 
+                    //bu eleman ziyaret edilmediyse
                     if (!visited[nRow, nCol] && neighbour.Value==1)
                     {
                         visited[nRow, nCol] = true;
@@ -196,7 +198,7 @@ namespace _Project.Tile
                     }
                 }
             }
-            for (int row = 0; row < rowCount; row++)
+            for (int row = 0; row < rowCount; row++)//işlen sonunda değeri 1 olan elamanlar ziyaret edilip edilmediğin kontrolü
             {
                 for (int col = 0; col < colCount; col++)
                 {
@@ -209,7 +211,7 @@ namespace _Project.Tile
         
             return visited;
         }
-        private  bool IsSolvable(MatrixInfo[,] matrixInfo)
+        private  bool IsSolvable(MatrixInfo[,] matrixInfo) // yine bfs kullanıp levelin geçilebilir olup olmadığını anlamaya çalışan bir algoritma bazen yanlış sonuçlar veriyor o nedenle kullanamadım
         {
             int rowCount = matrixInfo.GetLength(0);
             int colCount = matrixInfo.GetLength(1);

@@ -7,9 +7,9 @@ namespace _Project.Tile
     public class Tile : MonoBehaviour
     {
         [SerializeField]
-        private TileData _properties;
+        private TileData _properties; // Tile için gerekli değişkenler
 
-        private void Awake()
+        private void Awake() // Tile'a atanan state'e göre dış görünüşünün ayarlanması
         {
             if (_properties.TileState == TileState.LightOn)
             {
@@ -26,7 +26,7 @@ namespace _Project.Tile
         }
         
 
-        public void SwitchTileState(bool callByNeighbour=false)
+        public void SwitchTileState(bool callByNeighbour=false) // Tile'ın durumunun değiştirilmesi eğer tıklanarak değiştiyse komşularınında değiştirilmesi
         {
             if (_properties.TileState == TileState.Empty)
             {
@@ -51,18 +51,18 @@ namespace _Project.Tile
    
         }
 
-        private void SetTileColor()
+        private void SetTileColor()//Tile'ın sahip olduğu duruma göre renginin ayarlanması
         {
             _properties.MeshRenderer.material.DOColor(_properties.TileState == TileState.LightOn ? _properties.LightOnColor : _properties.LightOffColor, _properties.ColorOnOffTime);
         }
 
-        public void SetMatrixInfo(int row,int column,int value)
+        public void SetMatrixInfo(int row,int column,int value) //Tile'ın sahip olduğu MatrixInfo'nun set edilmesi
         {
             _properties.TileState = (TileState)value;
             _properties.MatrixInfo = new MatrixInfo(row, column, value);
         }
 
-        public int TileValue
+        public int TileValue // Tile'ın üzerinde taşıdığı değerin döndürülmesi -1,0,1
         {
             get
             {

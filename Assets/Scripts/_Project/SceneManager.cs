@@ -18,7 +18,7 @@ public class SceneManager : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
-	private bool IsSceneLoaded(string sceneName)
+	private bool IsSceneLoaded(string sceneName) // Zaten yüklü olan sahnenin tekrar yüklenmemesi için kontrol
 	{
 		for(int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
 		{
@@ -29,7 +29,7 @@ public class SceneManager : MonoBehaviour
 		}
 		return false;
 	}
-	public void LoadScene(string sceneName)
+	public void LoadScene(string sceneName) // Aktif olan sahne üzerine yeni sahne yüklenmesi
 	{
 		if(IsSceneLoaded(sceneName))
 		{
@@ -38,7 +38,7 @@ public class SceneManager : MonoBehaviour
 			
 		UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
 	}
-	public void UnloadScene(string sceneName)
+	public void UnloadScene(string sceneName) //istenilen sahnenin silinmesi
 	{
 		if(!IsSceneLoaded(sceneName))
 		{
@@ -47,7 +47,7 @@ public class SceneManager : MonoBehaviour
 		UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneName);
 	}
 
-	public void RestartGame()
+	public void RestartGame() // Lights out oyununda level geçişi veya oyun yeniden başlatılmak istenilirse
 	{
 		UnloadScene("LightsOutGame");
 		UnityEngine.SceneManagement.SceneManager.LoadScene("LightsOutGame", LoadSceneMode.Additive);

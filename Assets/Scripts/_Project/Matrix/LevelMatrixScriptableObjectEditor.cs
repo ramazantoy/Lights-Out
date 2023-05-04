@@ -9,15 +9,15 @@ namespace _Project.Matrix
     {
         private LevelMatrixScriptableObject levelMatrix;
         
-        private int cellSize = 25;
-        private GUIStyle whiteStyle;
-        private GUIStyle blackStyle;
-        private GUIStyle greenStyle;
-        private GUIStyle redStyle;
+        //level matrix editör üzerinde seçilirse oluşan maze'in inspector üzerinde gösterilmesi ve kayıt edilmesi
+        private int cellSize = 25; // hücre büyüklüğü
+        private GUIStyle whiteStyle;//beyaz box
+        private GUIStyle blackStyle;//siyah box
+        private GUIStyle greenStyle;//yeşil box
 
         private void OnEnable()
         {
-            levelMatrix = target as LevelMatrixScriptableObject;
+            levelMatrix = target as LevelMatrixScriptableObject; // inspectorda tıklamanın yakalanması
             
         }
 
@@ -26,12 +26,13 @@ namespace _Project.Matrix
         {
             EditorGUI.BeginChangeCheck();
 
+            //hedel level matrix'in verilerinin gösterilmesi
             levelMatrix.RowCount = EditorGUILayout.IntField("Row Count", levelMatrix.RowCount);
             levelMatrix.ColCount = EditorGUILayout.IntField("Column Count", levelMatrix.ColCount);
             
             levelMatrix.LoadMatrix();
 
-            if (levelMatrix.SavedMatrix == null)
+            if (levelMatrix.SavedMatrix == null) // yok ise veya row col değiştiyse tekrar oluşturulup kayıt edilmesi
             {
                 if (levelMatrix.Matrix == null || levelMatrix.Matrix.GetLength(0) != levelMatrix.RowCount || levelMatrix.Matrix.GetLength(1) != levelMatrix.ColCount)
                 {
@@ -41,7 +42,8 @@ namespace _Project.Matrix
                 }
             }
      
-            
+            //bilgilerin hem temsili kutucuklar olarak gösterilmesi 
+            //Hemde doldurulabilir slider olarak verilmesi
             for (int i = 0; i < levelMatrix.RowCount; i++)
             {
                 for (int j = 0; j < levelMatrix.ColCount; j++)
@@ -92,11 +94,14 @@ namespace _Project.Matrix
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.Space(3);
             }
-            levelMatrix.SaveMatrix();
+            //bilgilerin kayıt edilmesi
+            levelMatrix.SaveMatrix(); 
             EditorUtility.SetDirty(levelMatrix);
             
 
         }
+        
+        //Stil ayarlanması
         private Texture2D MakeTex(int width, int height, Color col)
         {
             Color[] pix = new Color[width * height];

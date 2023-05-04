@@ -6,7 +6,7 @@ namespace _Project.Matrix
 	[System.Serializable]
 	public  class MatrixHandler
 	{
-		public MatrixHandler(MatrixInfo[,] matrixInfos)
+		public MatrixHandler(MatrixInfo[,] matrixInfos) // Oyun tahtasını bir matris gibi ele alıp arka planda rahat bir şekilde yönetilnesi
 		{
 			_matrixInfos = matrixInfos;
 		}
@@ -24,49 +24,49 @@ namespace _Project.Matrix
 			}
 		}
 
-		public List<MatrixInfo> GetMyNeighbourWithCross(MatrixInfo matrixInfo)
+		public List<MatrixInfo> GetMyNeighbourWithCross(MatrixInfo matrixInfo) // Çapraz dahil istenilen matrisin komşularının liste olarak verilmesi
 		{
 			List<MatrixInfo> myNeighbours = new List<MatrixInfo>();
 	
 			int rowSize = _matrixInfos.GetLength(0);
 			int colSize = _matrixInfos.GetLength(1);
 
-			if (matrixInfo.Row > 0) // check top neighbor
+			if (matrixInfo.Row > 0) // üst komşu
 			{
 				myNeighbours.Add(_matrixInfos[matrixInfo.Row-1, matrixInfo.Column]);
 
-				if (matrixInfo.Column > 0) // check top-left neighbor
+				if (matrixInfo.Column > 0) // üst sol komşu
 				{
 					myNeighbours.Add(_matrixInfos[matrixInfo.Row-1, matrixInfo.Column-1]);
 				}
 
-				if (matrixInfo.Column < colSize-1) // check top-right neighbor
+				if (matrixInfo.Column < colSize-1) // üst sağ komşu
 				{
 					myNeighbours.Add(_matrixInfos[matrixInfo.Row-1, matrixInfo.Column+1]);
 				}
 			}
 
-			if (matrixInfo.Row < rowSize-1) // check bottom neighbor
+			if (matrixInfo.Row < rowSize-1) // alt komşu
 			{
 				myNeighbours.Add(_matrixInfos[matrixInfo.Row+1, matrixInfo.Column]);
 
-				if (matrixInfo.Column > 0) // check bottom-left neighbor
+				if (matrixInfo.Column > 0) // alt sol komşu
 				{
 					myNeighbours.Add(_matrixInfos[matrixInfo.Row+1, matrixInfo.Column-1]);
 				}
 
-				if (matrixInfo.Column < colSize-1) // check bottom-right neighbor
+				if (matrixInfo.Column < colSize-1) // alt sağ komşu
 				{
 					myNeighbours.Add(_matrixInfos[matrixInfo.Row+1, matrixInfo.Column+1]);
 				}
 			}
 
-			if (matrixInfo.Column > 0) // check left neighbor
+			if (matrixInfo.Column > 0) // sol komşu
 			{
 				myNeighbours.Add(_matrixInfos[matrixInfo.Row, matrixInfo.Column-1]);
 			}
 
-			if (matrixInfo.Column < colSize-1) // check right neighbor
+			if (matrixInfo.Column < colSize-1) // sağ komşu
 			{
 				myNeighbours.Add(_matrixInfos[matrixInfo.Row, matrixInfo.Column+1]);
 			}
@@ -74,7 +74,7 @@ namespace _Project.Matrix
 			return myNeighbours;
 			
 		}
-	public List<MatrixInfo> GetMyNeighbour(MatrixInfo matrixInfo)
+	public List<MatrixInfo> GetMyNeighbour(MatrixInfo matrixInfo) // Oyunun kurallarına göre olan komşuların listesinin geri döndüren fonksiyon
 	{
 		List<MatrixInfo> myNeighbours = new List<MatrixInfo>();
 
@@ -105,7 +105,7 @@ namespace _Project.Matrix
 	}
 
 		
-		public int GetIndex( int row, int column)
+		public int GetIndex( int row, int column) // istenilen tile'ın liste üzerinde olan index'inin hesaplanması
 		{
 			int n = _matrixInfos.GetLength(1);
 
@@ -114,11 +114,11 @@ namespace _Project.Matrix
 			return index;
 		}
 
-		public MatrixInfo GetMatrixInfo(int row, int col)
+		public MatrixInfo GetMatrixInfo(int row, int col) // istenilem matris bilgisi
 		{
 			return _matrixInfos[row, col];
 		}
-		public bool CheckMatrix()
+		public bool CheckMatrix() // oyunun bitip bitmediğinin kontrolü
 		{
 			int rows = _matrixInfos.GetLength(0);
 			int cols = _matrixInfos.GetLength(1);

@@ -9,6 +9,7 @@ namespace _Project.Matrix
     [System.Serializable]
     public class LevelMatrixScriptableObject : ScriptableObject
     {
+        //el ile level dizilmek istenilirse dizilen level'in arka planda liste olarak saklanması gerektiğinde matris olarak geri döndürülmesi
         public List<int> SavedMatrix;
         public int RowCount, ColCount;
         public int[,] Matrix;
@@ -16,17 +17,17 @@ namespace _Project.Matrix
 
 
         [Obsolete("Obsolete")]
-        public void SaveMatrix()
+        public void SaveMatrix() // elle dizilen matrisin kayıt edilmesi editör üzerinde yapılan değişikliklerin korunması
         {
             SavedMatrix = TwoDArrayToList(Matrix);
             SetDirty();
         }
 
-        public void LoadMatrix()
+        public void LoadMatrix()// listenin matrise dönüştürülmesi
         {
             Matrix = ListTo2DMatrix(SavedMatrix);
         }
-        private List<int> TwoDArrayToList(int[,] arr)
+        private List<int> TwoDArrayToList(int[,] arr) // matrisin listeye dönüştürülmesi
         {
             int rows = RowCount;
             int cols = ColCount;
@@ -42,21 +43,8 @@ namespace _Project.Matrix
             return result;
         }
         
-        public MatrixInfo[,] ListTo2DMatrixInfoArray(List<int> list)
-        {
-            MatrixInfo[,] result = new MatrixInfo[RowCount, ColCount];
-            for (int i = 0; i < RowCount; i++)
-            {
-                for (int j = 0; j <ColCount; j++)
-                {
-                    int index = i * ColCount + j;
-                    result[i, j] = new MatrixInfo(i, j, list[index]);
-                }
-            }
-            return result;
-        }
 
-        private int[,] ListTo2DMatrix(List<int> list)
+        private int[,] ListTo2DMatrix(List<int> list) // listenin matrise dönüştürülmesi
         {
             int[,] result = new int[RowCount, ColCount];
             if (list == null)
@@ -81,7 +69,7 @@ namespace _Project.Matrix
             }
             return result;
         }
-        public MatrixInfo[,] ListTo2DMatrixInfoArray()
+        public MatrixInfo[,] ListTo2DMatrixInfoArray() // int tipinde olan matris'in matrixInfo olarak geri döndürülmesi
         {
             MatrixInfo[,] result = new MatrixInfo[RowCount, ColCount];
             for (int i = 0; i < RowCount; i++)
