@@ -46,4 +46,10 @@ public class SceneManager : MonoBehaviour
 		}
 		UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneName);
 	}
+
+	public void RestartGame()
+	{
+		UnloadScene("LightsOutGame");
+		UnityEngine.SceneManagement.SceneManager.LoadScene("LightsOutGame", LoadSceneMode.Additive);
+	}
 }

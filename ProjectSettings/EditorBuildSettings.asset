@@ -8,4 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/DummyScene_0.unity
+    guid: 79b431ff838214ee0a1d96aa11665c1f
+  - enabled: 1
+    path: Assets/Scenes/DummyScene_1.unity
+    guid: 0505b19a8067343d18d9e4df1ffdf222
+  - enabled: 1
+    path: Assets/Scenes/DummyScene_2.unity
+    guid: 1a21f3027c4914694a5de2e9240f9578
+  - enabled: 1
+    path: Assets/Scenes/LightsOutGame.unity
+    guid: c8adfd2765df15048b63dae26443162e
   m_configObjects: {}

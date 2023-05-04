@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using _Project.GameManager;
 using _Project.Matrix;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace _Project.Tile
@@ -59,6 +61,11 @@ namespace _Project.Tile
 			{
 				Destroy(gameObject);
 			}
+		}
+
+		private void Start()
+		{
+			BuildTiles();
 		}
 
 		public void BuildTiles()

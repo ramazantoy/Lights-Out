@@ -43,14 +43,12 @@ namespace _Project.GameManager
 			{
 				SaveManager.Instance.GameSaveState.LastLevel++;
 				SaveManager.Instance.GameSaveState.HaveSaveGame = false;
-				Scene currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-				UnityEngine.SceneManagement.SceneManager.LoadScene(currentScene.buildIndex);
+				_gameState = GameState.Playing;
+				SceneManager.Instance.RestartGame();
+				
 				//Load to nextLevel
 			}
-			else if (_gameState == GameState.Playing)
-			{
-				TileManager.Instance.BuildTiles();
-			}
+		
 		}
 
 		private void Update()
