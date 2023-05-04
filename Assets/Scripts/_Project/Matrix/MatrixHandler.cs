@@ -107,13 +107,36 @@ namespace _Project.Matrix
 		
 		public int GetIndex( int row, int column)
 		{
-			int m = _matrixInfos.GetLength(0);
 			int n = _matrixInfos.GetLength(1);
 
 			int index = row * n + column;
 
 			return index;
 		}
+
+		public MatrixInfo GetMatrixInfo(int row, int col)
+		{
+			return _matrixInfos[row, col];
+		}
+		public bool CheckMatrix()
+		{
+			int rows = _matrixInfos.GetLength(0);
+			int cols = _matrixInfos.GetLength(1);
+    
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < cols; j++)
+				{
+					if (_matrixInfos[i, j].Value ==1)
+					{
+						return false;
+					}
+				}
+			}
+    
+			return true;
+		}
+		
 
 	}
 	

@@ -36,12 +36,18 @@ namespace _Project.Tile
 
             _properties.TileState = _properties.TileState == TileState.LightOn ? TileState.LightOff : TileState.LightOn;
 
+            TileManager.Instance.MatrixHandler.GetMatrixInfo(_properties.MatrixInfo.Row, _properties.MatrixInfo.Column).Value = (int) _properties.TileState;
+
             SetTileColor();
             
             if (!callByNeighbour)
             {
                 TileManager.Instance.TileDown(_properties.MatrixInfo);
             }
+            
+          
+            
+            
    
         }
 

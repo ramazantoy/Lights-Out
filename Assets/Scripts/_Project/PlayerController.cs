@@ -1,3 +1,4 @@
+using _Project.GameManager;
 using Template;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace _Project
 
         private void Touch(Template.UserInput.TouchType touchType)
         {
-            if (touchType != UserInput.TouchType.Down) return;
+            if (touchType != UserInput.TouchType.Down || GameManager.GameManager.Instance.GameState!=GameState.Playing) return;
         
             var hit = UserInput.Instance.Raycast(_tileLayerMask);
 

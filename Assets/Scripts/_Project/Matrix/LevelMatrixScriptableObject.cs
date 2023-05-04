@@ -42,7 +42,7 @@ namespace _Project.Matrix
             return result;
         }
         
-        private MatrixInfo[,] ListTo2DMatrixInfoArray(List<int> list)
+        public MatrixInfo[,] ListTo2DMatrixInfoArray(List<int> list)
         {
             MatrixInfo[,] result = new MatrixInfo[RowCount, ColCount];
             for (int i = 0; i < RowCount; i++)
@@ -77,6 +77,19 @@ namespace _Project.Matrix
                         result[i, j] = list[index];
                     }
                     
+                }
+            }
+            return result;
+        }
+        public MatrixInfo[,] ListTo2DMatrixInfoArray()
+        {
+            MatrixInfo[,] result = new MatrixInfo[RowCount, ColCount];
+            for (int i = 0; i < RowCount; i++)
+            {
+                for (int j = 0; j <ColCount; j++)
+                {
+                    int index = i * ColCount + j;
+                    result[i, j] = new MatrixInfo(i, j, SavedMatrix[index]);
                 }
             }
             return result;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Project.GameManager;
 using _Project.Matrix;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace _Project.Tile
 		private TileManagerData _properties;
 
 		private List<Tile> _tiles;
-
+		
 		public MatrixInfo[,] MatrixInfo
 		{
 			set
@@ -60,12 +61,7 @@ namespace _Project.Tile
 			}
 		}
 
-		private void Start()
-		{
-			BuildTiles();
-		}
-
-		private void BuildTiles()
+		public void BuildTiles()
 		{
 			if (SaveManager.Instance.GameSaveState.HaveSaveGame)
 			{
@@ -80,7 +76,21 @@ namespace _Project.Tile
 			}
 			else
 			{
-				_tiles=_properties.TileBuilder.BuildRandomTiles();
+				if (_properties.OverrideRandomLevel)
+				{
+					_tiles=_properties.TileBuilder.BuildRandomTiles();
+					return;
+				}
+				if (SaveManager.Instance.GameSaveState.LastLevel < _properties.Levels.Count)
+				{
+					_tiles = _properties.TileBuilder.BuildSavedTiles(_properties
+						.Levels[SaveManager.Instance.GameSaveState.LastLevel].ListTo2DMatrixInfoArray());
+				}
+				else
+				{
+					_tiles = _properties.TileBuilder.BuildRandomTiles();
+				}
+		
 			}
 
 		}
@@ -94,6 +104,7 @@ namespace _Project.Tile
 				_tiles[_properties.MatrixHandler.GetIndex(matrixNeighbour.Row,matrixNeighbour.Column)].SwitchTileState(true);
 			}
 			
+			CheckMatrix();
 			SaveCurrentMatrix();
 		}
 		
@@ -141,8 +152,13 @@ namespace _Project.Tile
 			return result;
 		}
 
-		
-		
+		private void CheckMatrix()
+		{
+			if (GameManager.GameManager.Instance.GameState == GameState.Playing && _properties.MatrixHandler.CheckMatrix())
+			{
+				GameManager.GameManager.Instance.UpdateGameState(GameState.End);
+			}
+		}
 
 
 	}

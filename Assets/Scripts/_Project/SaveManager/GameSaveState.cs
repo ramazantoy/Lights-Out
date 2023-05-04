@@ -22,7 +22,7 @@ public class GameSaveState
         if (saveString == "")
         {
             _haveSaveGame = false;
-            _lastLevel = 1;
+            _lastLevel = 0;
             _matrixValues = new List<int>();
             _rowCount = 0;
             _colCount = 0;

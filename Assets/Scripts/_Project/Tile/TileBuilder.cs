@@ -104,8 +104,7 @@ namespace _Project.Tile
             {
                 for (int j = 0; j < _properties.Column; j++)
                 {
-                    Vector3 spawnPos = startPos + new Vector3(j * (_properties.Spacing + 1),
-                        -i * (_properties.Spacing + 1), 0); // Her bir tile'ın pozisyonu +1'in sebebi tilerın genişliği ve uzunluğu 1 birim
+                    Vector3 spawnPos = startPos + new Vector3(j * (_properties.Spacing + 1), -i * (_properties.Spacing + 1), 0); // Her bir tile'ın pozisyonu +1'in sebebi tilerın genişliği ve uzunluğu 1 birim
 
                     Tile tileObject = TilePool.Instance.TakeTile();
                     tileObject.gameObject.name = "[" + i + "," + j + "] Tile";
